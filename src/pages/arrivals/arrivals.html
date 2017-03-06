@@ -7,12 +7,31 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Arrivals</ion-title>
+    <ion-title>Finley's Majestical Arrivals</ion-title>
   </ion-navbar>
 
 </ion-header>
 
 
 <ion-content padding>
+    <ion-refresher (ionRefresh)="getArrivals($event)">
+        <ion-refresher-content pullingText="Pull to refresh" refreshingText="Refreshing..."></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-item>
+        <ion-label>Include Arrived</ion-label>
+        <ion-toggle [(ngModel)]="arrived"></ion-toggle>
+    </ion-item>
+    <ion-list>
+        <div *ngFor="let flight of flights">
+            <ion-item [hidden]="flight.RunwayTime > 0 && !arrived">
+                <div>{{flight.Airport}} - {{flight.Airline}}</div>
+                <div style="font-size:0.9em">
+                    <div>Scheduled: {{flight.ScheduledTimeText}}  Estimated: {{flight.EstimatedTime | date:'H:mm'}}</div>
+                    <div [ngClass]="{approach:isOnApproach(flight)}" >{{flight.Status}} {{flight.StatusTimeText}}</div>
+                </div>
+            </ion-item>
+        </div>
+    </ion-list>
 
 </ion-content>
