@@ -1,22 +1,38 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Http } from '@angular/http';
+import { NavController } from 'ionic-angular';
+import 'rxjs/add/operator/map';
 
-/*
-  Generated class for the Departures page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
-  selector: 'page-departures',
-  templateUrl: 'departures.html'
+    selector: 'page-departures',
+    templateUrl: 'departures.html'
 })
 export class DeparturesPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {}
+    flights: any;
+    private _departed: boolean = false;
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad DeparturesPage');
-  }
+    get departed(): boolean {
+        return this._departed;    
+    }
+    set departed(value: boolean) {
+        this._departed = value;
+    }
 
+    
+    constructor(public navCtrl: NavController, private http: Http) {
+        this.getDepartures();
+    }
+
+    getDepartures(refresher: any = null) {
+        console.log("getting posts");
+
+        this.http.get("http://daxaar.ddns.net:3001/flights/departures")
+            .map(res => res.json())
+            .subscribe(data => {
+                this.flights = data.departures;
+                refresher && refresher.complete();
+            },
+            error => console.log("error! : ", error));
+    }
 }
