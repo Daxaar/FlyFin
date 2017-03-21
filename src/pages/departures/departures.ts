@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Http } from '@angular/http';
 import { NavController } from 'ionic-angular';
 import 'rxjs/add/operator/map';
+import { LocalNotifications } from 'ionic-native';
+import { AlertController } from 'ionic-angular';
 
 @Component({
     selector: 'page-departures',
@@ -20,7 +22,7 @@ export class DeparturesPage {
     }
 
     
-    constructor(public navCtrl: NavController, private http: Http) {
+    constructor(public navCtrl: NavController, private http: Http, private alertCtl : AlertController) {
         this.getDepartures();
     }
 
@@ -32,7 +34,24 @@ export class DeparturesPage {
             .subscribe(data => {
                 this.flights = data.departures;
                 refresher && refresher.complete();
+                //setTimeout(function(){
+                //    this.presentAlert(null,'xzy');
+                //},2000);
+                LocalNotifications.schedule({
+                  title: "There's a plane coming in!",
+                  at: new Date(new Date().getTime() + 5 * 1000),
+                  sound: null
+                });
             },
             error => console.log("error! : ", error));
     }
+
+    // presentAlert(text: string, subTitle: string) {
+    //     let alert = this.alertCtl.create({
+    //     title: "There's a plane coming in!",
+    //     subTitle: "Look up in the air!",
+    //     buttons: ['Dismiss']
+    //     });
+    //     alert.present();
+    // }
 }
