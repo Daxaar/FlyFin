@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-
 /*
   Generated class for the Settings page.
 
@@ -16,9 +15,9 @@ export class SettingsPage {
   private _settings = new Array<Setting>();
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this._settings.push(new Setting("Sort by expected",true));
-    this._settings.push(new Setting("Show arrived", false));
-    this._settings.push(new Setting("Show departed", false));
+    this._settings.push(new Setting("sort_expected", "Sort by expected",true));
+    this._settings.push(new Setting("show_arrived","Show arrived", false));
+    this._settings.push(new Setting("show_departed", "Show departed", false));
   }
 
   ionViewDidLoad() {
@@ -33,25 +32,22 @@ export class SettingsPage {
 
 export class Setting {
 
-    private _text:string;
-    private _selected:boolean;
-
-    constructor(text: string, selected: boolean ){
-      this._text = text;
-      this._selected = selected;
+    constructor(private key: string,public text: string, selected: boolean ){      
+      console.log("ctor " + key);
+      if(localStorage.getItem(key) == null){
+        console.log("ctor selected " + <any>selected);
+        localStorage.setItem(key, <any>selected);
+      }
     }
 
-    get text(): string {
-      return this._text;
-    }
-    set text(value: string){
-      this._text = value;
-    }
     get selected(): boolean {
-      return this._selected;
+      var selected = <any>localStorage.getItem(this.key);
+      console.log(`get ${this.text} ${selected}`);
+      return selected;
     }
+
     set selected(value: boolean){
-      console.log(`${this._text} - ${value}`);
-      this._selected = value;
+      console.log(`set ${this.text} - ${value}`);
+      localStorage.setItem(this.key, <any>value);
     }
 }
