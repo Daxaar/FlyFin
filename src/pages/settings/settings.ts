@@ -15,9 +15,10 @@ export class SettingsPage {
   private _settings = new Array<Setting>();
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this._settings.push(new Setting("sort_expected", "Sort by expected",true));
+    this._settings.push(new Setting("sort_estimated", "Sort by estimated",true));
     this._settings.push(new Setting("show_arrived","Show arrived", false));
     this._settings.push(new Setting("show_departed", "Show departed", false));
+    this._settings.push(new Setting("notify_on_approach", "Notify On Approach", false));
   }
 
   ionViewDidLoad() {

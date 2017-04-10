@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'page-arrivals',
@@ -37,7 +38,11 @@ export class ArrivalsPage {
       this.http.get("http://daxaar.ddns.net:3001/flights/arrivals")
           .map(res => res.json())
           .subscribe(data => {
-              this.flights = data.arrivals;
+              if(localStorage.getItem("sort_estimated")){
+                this.flights = _.sortBy(data.arrivals, arrival => arrival.EstimatedTime);
+              } else{
+                this.flights = data.arrivals;
+              }
               refresher && refresher.complete();
           },
           error => console.log("error! : ", error));
