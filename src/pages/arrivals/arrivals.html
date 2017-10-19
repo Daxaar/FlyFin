@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Finley's Majestical Arrivals</ion-title>
+    <ion-title>Arrivals</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -24,11 +24,11 @@
     </ion-item>
     <ion-list>
         <div *ngFor="let flight of flights">
-            <ion-item [hidden]="flight.RunwayTime > 0 && !arrived">
-                <div>{{flight.Airport}} - {{flight.Airline}}</div>
+            <ion-item [hidden]="flight.runwayTime > 0 && !arrived">
+                <div>{{flight.airport}} - {{flight.airline}}</div>
                 <div style="font-size:0.9em">
-                    <div>Scheduled: {{flight.ScheduledTimeText}}  Estimated: {{flight.EstimatedTime | date:'H:mm'}}</div>
-                    <div [ngClass]="{approach:isOnApproach(flight)}" >{{flight.Status}} {{flight.StatusTimeText}}</div>
+                    <div>Scheduled: {{parseJsonDate(flight.scheduledTime) | date:'H:mm'}}  Estimated: {{parseJsonDate(flight.estimatedTime) | date:'H:mm'}}</div>
+                    <div [ngClass]="{approach:isOnApproach(flight)}" >{{flight.status}} {{flight.statusTimeText}}</div>
                 </div>
             </ion-item>
         </div>

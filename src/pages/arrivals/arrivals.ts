@@ -35,16 +35,23 @@ export class ArrivalsPage {
 
   getArrivals(refresher: any = null) {
 
-      this.http.get("http://daxaar.ddns.net:3001/flights/arrivals")
+      //this.http.get("http://daxaar.ddns.net:3001/flights/arrivals")
+      this.http.get("http://flyfin.azurewebsites.net/api/flights/arrivals")      
           .map(res => res.json())
           .subscribe(data => {
               if(localStorage.getItem("sort_estimated")){
-                this.flights = _.sortBy(data.arrivals, arrival => arrival.EstimatedTime);
+                this.flights = _.sortBy(data, arrival => this.parseJsonDate(arrival.estimatedTime));
               } else{
-                this.flights = data.arrivals;
+                this.flights = data;
               }
+              console.log("loaded arrivals");
+              console.log(this.flights);
               refresher && refresher.complete();
           },
           error => console.log("error! : ", error));
   }
+
+    parseJsonDate(jsonDateString){
+        return new Date(parseInt(jsonDateString.replace('/Date(', '')));
+    }
 }
